@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Uma cartinha pra você 💌</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Pacifico&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--p1:#ffe3ec;--p2:#ffb3cb;--p3:#ff7fa3;--r:#e6194b;--rd:#b0103a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:radial-gradient(circle at 20% 15%,#fff0f5 0,transparent 45%),radial-gradient(circle at 85% 85%,#ffc2d6 0,transparent 50%),linear-gradient(160deg,#ffd6e5,#ff9fbf);font-family:'Quicksand',system-ui,sans-serif;color:var(--rd);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.fx{position:fixed;pointer-events:none;z-index:1;user-select:none}
+.float{bottom:-40px;animation:up linear forwards}
+@keyframes up{to{transform:translateY(-115vh) rotate(40deg);opacity:0}}
+.trail{z-index:50;font-size:14px;animation:tr .9s ease-out forwards}
+@keyframes tr{to{transform:translate(var(--dx),var(--dy)) scale(.2);opacity:0}}
+h1{font-family:'Pacifico',cursive;font-weight:400;font-size:clamp(26px,7vw,40px);margin:0 0 6px;color:var(--r);text-shadow:0 3px 0 #fff,0 6px 14px rgba(230,25,75,.25);text-align:center;z-index:2;animation:bob 3s ease-in-out infinite}
+.sub{margin:0 0 34px;font-weight:700;opacity:.8;z-index:2;text-align:center;padding:0 16px;transition:opacity .6s}
+@keyframes bob{50%{transform:translateY(-6px) rotate(-1deg)}}
+.stage{position:relative;z-index:3;transition:transform .9s cubic-bezier(.6,-.2,.4,1.2),opacity .8s}
+.env{position:relative;width:min(320px,82vw);aspect-ratio:320/218;filter:drop-shadow(0 18px 24px rgba(176,16,58,.35));animation:sway 4s ease-in-out infinite}
+.stage.opened .env{animation:none}
+@keyframes sway{50%{transform:rotate(1.5deg) translateY(-5px)}}
+.env>div{position:absolute;inset:0}
+.back{background:#ff8fb1;border-radius:14px}
+.front{background:linear-gradient(135deg,#ff7fa3,#ff6b94);clip-path:polygon(0 0,50% 52%,100% 0,100% 100%,0 100%);border-radius:14px;z-index:2}
+.flap{height:62%!important;inset:0 0 auto 0!important;background:linear-gradient(#ff5c8a,#ff7fa3);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .9s ease;z-index:4;border-radius:14px 14px 0 0}
+.stage.opened .flap{transform:rotateX(180deg);z-index:1}
+.mini{position:absolute!important;inset:auto!important;left:10%;right:10%;top:12%;bottom:6%;background:#fff;border-radius:8px;z-index:1;box-shadow:0 0 0 1px #ffd3e0}
+.rib-h,.rib-v{background:repeating-linear-gradient(90deg,var(--r) 0 10px,#f0295a 10px 20px);z-index:5;transition:transform .8s ease .15s,opacity .6s ease .3s;box-shadow:inset 0 0 0 3px rgba(255,255,255,.35)}
+.rib-h{inset:42% 0 auto 0!important;height:16%}
+.rib-v{inset:0 auto 0 43%!important;width:14%;background:repeating-linear-gradient(0deg,var(--r) 0 10px,#f0295a 10px 20px)}
+.stage.opened .rib-h{transform:translateX(-120%);opacity:0}
+.stage.opened .rib-v{transform:translateY(130%);opacity:0}
+.seal{position:absolute;left:50%;top:50%;width:92px;height:92px;margin:-46px 0 0 -46px;z-index:6;cursor:pointer;border:0;background:none;padding:0;animation:beat 1.2s infinite;filter:drop-shadow(0 6px 8px rgba(120,0,30,.45))}
+.seal:focus-visible{outline:3px dashed #fff;outline-offset:6px;border-radius:50%}
+@keyframes beat{0%,60%,100%{transform:scale(1)}15%{transform:scale(1.18)}30%{transform:scale(.97)}45%{transform:scale(1.12)}}
+.seal svg{position:absolute;inset:0;width:100%;height:100%;fill:url(#hg);transition:transform .9s cubic-bezier(.5,0,.8,.5),opacity .9s}
+.seal .l{clip-path:inset(0 50% 0 0)}.seal .r{clip-path:inset(0 0 0 50%)}
+.stage.opened .seal{animation:none;pointer-events:none}
+.stage.opened .seal .l{transform:translate(-90px,260px) rotate(-70deg);opacity:0}
+.stage.opened .seal .r{transform:translate(90px,260px) rotate(70deg);opacity:0}
+.hint{position:absolute;left:50%;bottom:-40px;transform:translateX(-50%);white-space:nowrap;font-family:'Caveat',cursive;font-size:24px;font-weight:700;animation:bob 2s infinite;transition:opacity .4s}
+.stage.opened .hint{opacity:0}
+.stage.gone{transform:translateY(60vh) scale(.6);opacity:0;pointer-events:none}
+.pw{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:16px;pointer-events:none}
+.paper{position:relative;width:min(92vw,440px);max-height:84vh;overflow:auto;background:#fff;border-radius:18px;padding:40px 28px 28px;text-align:center;box-shadow:0 0 0 6px #ffd0df,0 0 0 9px #fff,0 24px 50px rgba(176,16,58,.4);background-image:repeating-linear-gradient(transparent 0 33px,#ffe3ec 33px 34px);transform:translateY(120vh) rotate(8deg) scale(.5);opacity:0;transition:transform 1.1s cubic-bezier(.2,1.2,.3,1),opacity .5s}
+.pw.show{pointer-events:auto}
+.pw.show .paper{transform:none;opacity:1}
+.tape{position:absolute;top:-4px;left:50%;width:110px;height:28px;margin-left:-55px;background:rgba(255,160,190,.7);transform:rotate(-3deg);border-left:3px dotted #fff;border-right:3px dotted #fff}
+.to{font-family:'Pacifico',cursive;color:var(--r);font-size:26px;margin:6px 0 14px}
+.msg{font-family:'Caveat',cursive;font-size:clamp(23px,5.6vw,29px);line-height:34px;white-space:pre-wrap;text-align:left;min-height:140px;margin:0;color:#7a1033}
+.msg::after{content:"♥";color:var(--r);animation:bl .8s infinite;margin-left:3px}
+.msg.done::after{content:""}
+@keyframes bl{50%{opacity:0}}
+.sig{font-family:'Pacifico',cursive;color:var(--r);font-size:22px;margin-top:16px;opacity:0;transform:translateY(10px);transition:all .8s}
+.sig.in{opacity:1;transform:none}
+.st{position:absolute;font-size:24px;animation:bob 2.5s infinite}
+.btns{display:flex;gap:10px;justify-content:center;margin-top:18px;opacity:0;transition:opacity .8s}
+.btns.in{opacity:1}
+button.b{font:700 15px 'Quicksand',sans-serif;border:0;border-radius:999px;padding:10px 18px;background:linear-gradient(#ff7fa3,var(--r));color:#fff;cursor:pointer;box-shadow:0 4px 0 var(--rd);transition:transform .15s}
+button.b:active{transform:translateY(3px);box-shadow:0 1px 0 var(--rd)}
+button.b.alt{background:#fff;color:var(--r);box-shadow:0 4px 0 #ffb3cb}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs><radialGradient id="hg" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#ff6b8f"/><stop offset=".6" stop-color="#e6194b"/><stop offset="1" stop-color="#a50c33"/></radialGradient><symbol id="h" viewBox="0 0 24 24"><path d="M12 21.5C5 16.5 2 12.8 2 8.8 2 5.9 4.2 4 6.8 4c1.9 0 3.5 1 5.2 3 1.7-2 3.3-3 5.2-3C19.8 4 22 5.9 22 8.8c0 4-3 7.7-10 12.7z"/></symbol></defs></svg>
+
+
+<div hidden>
+ 
+  <span id="nome">Meu amorzinho, Clara</span>
+
+ 
+  <span id="assinatura">Com todo o meu amor e carinho, ❤</span>
+
+  
+  <template id="mensagem">
+Desde que te conheci você vem sendo uma pessoa incrivel e me mostrando que a cada dia que passa algo dentro de mim florece
+
+Você deixa os meus dias mais leves, o meu sorriso mais fácil e o meu coração mais cheio.
+
+Obrigado por ser legal cmg assim. Eu gosto muito de você. 💗
+  </template>
+</div>
+<!-- ======================= FIM DA ÁREA ======================= -->
+
+<h1 id="title">Uma cartinha pra você</h1>
+<p class="sub" id="sub">toque no coração para abrir 💗</p>
+
+<div class="stage" id="stage">
+  <div class="env">
+    <div class="back"></div>
+    <div class="mini"></div>
+    <div class="front"></div>
+    <div class="flap"></div>
+    <div class="rib-h"></div>
+    <div class="rib-v"></div>
+    <button class="seal" id="seal" aria-label="Abrir a carta">
+      <svg class="l" viewBox="0 0 24 24"><use href="#h"/></svg>
+      <svg class="r" viewBox="0 0 24 24"><use href="#h"/></svg>
+    </button>
+  </div>
+  <div class="hint" id="hint">clique no coraçãozinho ↑</div>
+</div>
+
+<div class="pw" id="pw">
+  <div class="paper" id="paper">
+    <div class="tape"></div>
+    <span class="st" style="left:10px;top:14px">🌸</span>
+    <span class="st" style="right:12px;top:16px;animation-delay:.7s">💖</span>
+    <div class="to" id="to"></div>
+    <p class="msg" id="msg"></p>
+    <div class="sig" id="sig"></div>
+    <div class="btns" id="btns">
+      <button class="b" id="again">💞 mais amor</button>
+      <button class="b alt" id="close">fechar carta</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var txt=function(id){return document.getElementById(id).textContent.trim()};
+var raw=document.getElementById('mensagem').innerHTML.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+var data={to:txt('nome'),from:txt('assinatura'),msg:raw.split('\n').map(function(l){return l.trim()}).join('\n').trim()};
+var typing=null,opened=false;
+function fill(){$('to').textContent="Para "+data.to+" 💌";$('sig').textContent=data.from;document.title="Uma cartinha pra "+data.to+" 💌";$('title').textContent="Uma cartinha pra "+data.to}
+fill();
+
+/* corações flutuantes */
+var em=["💗","💖","💕","🌸","💘","🎀","✨","🌷"];
+function floater(){var s=document.createElement('span');s.className='fx float';s.textContent=em[Math.random()*em.length|0];s.style.left=Math.random()*100+'vw';s.style.fontSize=(14+Math.random()*26)+'px';var t=7+Math.random()*8;s.style.animationDuration=t+'s';s.style.opacity=.55+Math.random()*.4;document.body.appendChild(s);setTimeout(function(){s.remove()},t*1000)}
+for(var i=0;i<14;i++)setTimeout(floater,i*250);setInterval(floater,700);
+
+/* rastro de brilho */
+var last=0;
+document.addEventListener('pointermove',function(e){var n=Date.now();if(n-last<60)return;last=n;spark(e.clientX,e.clientY,1)});
+function spark(x,y,n,big){for(var i=0;i<n;i++){var s=document.createElement('span');s.className='fx trail';s.textContent=["✨","💗","💖","🌸"][Math.random()*4|0];s.style.left=x+'px';s.style.top=y+'px';var a=Math.random()*6.28,d=big?60+Math.random()*90:20+Math.random()*25;s.style.setProperty('--dx',Math.cos(a)*d+'px');s.style.setProperty('--dy',(Math.sin(a)*d-(big?30:0))+'px');if(big)s.style.fontSize=(16+Math.random()*16)+'px';document.body.appendChild(s);setTimeout(function(el){el.remove()}.bind(null,s),950)}}
+document.addEventListener('pointerdown',function(e){spark(e.clientX,e.clientY,8,true)});
+
+/* abrir carta */
+function rain(n){for(var i=0;i<n;i++)setTimeout(floater,i*60)}
+$('seal').addEventListener('click',function(){
+  if(opened)return;opened=true;$('stage').classList.add('opened');$('sub').style.opacity=0;
+  var r=$('seal').getBoundingClientRect();spark(r.left+r.width/2,r.top+r.height/2,22,true);
+  setTimeout(function(){$('stage').classList.add('gone');$('pw').classList.add('show');rain(18);setTimeout(write,900)},1300);
+});
+function write(){
+  var m=$('msg'),t=data.msg,i=0;m.textContent='';m.classList.remove('done');$('sig').classList.remove('in');$('btns').classList.remove('in');
+  clearInterval(typing);
+  typing=setInterval(function(){m.textContent=t.slice(0,++i);m.scrollIntoView&&0;$('paper').scrollTop=1e5;if(i>=t.length)finish()},42);
+}
+function finish(){clearInterval(typing);$('msg').textContent=data.msg;$('msg').classList.add('done');$('sig').classList.add('in');setTimeout(function(){$('btns').classList.add('in')},600);rain(25)}
+$('paper').addEventListener('click',function(e){if(typing&&!$('msg').classList.contains('done')&&e.target.id!=='again'&&e.target.id!=='close'){finish()}});
+$('again').addEventListener('click',function(e){e.stopPropagation();rain(40);var r=e.target.getBoundingClientRect();spark(r.left+r.width/2,r.top,18,true)});
+$('close').addEventListener('click',function(e){e.stopPropagation();clearInterval(typing);$('pw').classList.remove('show');setTimeout(function(){$('stage').classList.remove('gone');$('stage').classList.remove('opened');$('sub').style.opacity=1;opened=false},900)});
+
+})();
+</script>
+</body>
+</html>
